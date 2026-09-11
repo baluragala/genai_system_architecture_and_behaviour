@@ -1,0 +1,31 @@
+# ---------------------------------------------------------------------------
+# GenAI System Architecture & Behaviour (C8W1S1) — dependencies
+# ---------------------------------------------------------------------------
+# Deliberately short. This session is about how components are ARRANGED, not
+# about any particular framework — so there is no orchestration library here.
+# The orchestrator is ~200 readable lines in meridian/orchestrator.py, because
+# in a 120-minute session the control flow has to be visible.
+# ---------------------------------------------------------------------------
+
+# --- L4, the model layer. REQUIRED: there is no offline fallback. ----------
+# See the docstring in meridian/config.py for why that is deliberate.
+openai>=1.30
+
+# --- Notebook 04, the multimodal block ------------------------------------
+# The claim form, repair invoice and damage photo are RENDERED at runtime, so
+# the planted defects (a smudged digit, a checkbox straddling two boxes) are
+# identical for everyone in the room. No binary assets in the repo.
+pillow>=10.0
+
+# --- Notebook 05, the protocol block --------------------------------------
+# A real MCP stdio server in a real subprocess. Pinned to the v2 line: the SDK
+# renamed both the server API and the tool `inputSchema` field between majors,
+# and an unpinned install is how a live session discovers that.
+mcp>=2,<3
+
+# --- Development only ------------------------------------------------------
+pytest>=8.0
+
+# --- Local notebooks (Colab already has these) -----------------------------
+# jupyterlab>=4.0
+# ipykernel>=6.29

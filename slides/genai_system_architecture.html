@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GenAI System Architecture &amp; Behaviour — C8W1S1</title>
+<style>
+  :root{
+    --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#ffffff;
+    --accent:#e0164b; --accent-soft:#fff1f4; --ok:#0f766e; --warn:#b45309;
+    --code:#f8fafc;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --ink:#e7ecf3; --muted:#94a3b8; --line:#1e293b; --bg:#0b1220;
+           --accent:#ff5b80; --accent-soft:#1c1020; --ok:#5eead4; --warn:#fbbf24;
+           --code:#0f172a; }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;}
+  .deck{max-width:1100px;margin:0 auto;padding:0 24px}
+  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:64px 0;border-bottom:1px solid var(--line);scroll-margin-top:0}
+  section.title{min-height:100vh}
+  h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
+  h2{font-size:clamp(1.5rem,3.4vw,2.3rem);line-height:1.15;margin:0 0 8px;letter-spacing:-.015em}
+  h3{font-size:1.05rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);
+     margin:0 0 20px;font-weight:700}
+  p{margin:0 0 14px;max-width:70ch}
+  .lead{font-size:1.25rem;color:var(--muted);max-width:62ch}
+  .big{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.3;
+    border-left:5px solid var(--accent);padding:14px 0 14px 22px;margin:26px 0;max-width:30ch}
+  .kicker{color:var(--muted);font-size:.95rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:.94rem}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
+  code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;overflow-x:auto;line-height:1.5}
+  .stack{display:flex;flex-direction:column;gap:6px;margin:18px 0}
+  .layer{display:grid;grid-template-columns:52px 1fr 1fr;gap:14px;align-items:baseline;
+    padding:10px 14px;border:1px solid var(--line);border-radius:9px}
+  .layer b{color:var(--accent);font-variant-numeric:tabular-nums}
+  .layer span{color:var(--muted);font-size:.9rem}
+  .layer.hi{background:var(--accent-soft);border-color:var(--accent)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}.layer{grid-template-columns:44px 1fr}
+    .layer span{grid-column:2}}
+  .tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.75rem;
+    background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);
+    letter-spacing:.05em;text-transform:uppercase;font-weight:700}
+  .note{color:var(--muted);font-size:.92rem}
+  ol,ul{max-width:70ch;padding-left:22px}
+  li{margin:7px 0}
+  .scroll{overflow-x:auto}
+  hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="title">
+  <div class="kicker">GenAI — C8W1S1 · 120 minutes</div>
+  <h1>GenAI System Architecture<br>&amp; Behaviour</h1>
+  <p class="lead">Five blocks. Seven layers. One insurance claims system, built
+  in front of you — and broken on purpose, four times.</p>
+  <div class="big">The model is the doctor.<br>Your system is the hospital.</div>
+  <p class="note">Scroll to advance. Meridian Insurance · motor claims triage.</p>
+</section>
+
+<section>
+  <h3>Block 1 · 25 min</h3>
+  <h2>A story that happens twice a year</h2>
+  <p>A developer ships the obvious thing in about an hour:</p>
+<pre>response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": f"Assess this claim: {claim_text}"}],
+)</pre>
+  <p>It demos beautifully. It gets funded. Four months later:</p>
+  <table>
+    <tr><th>What happened</th><th>Cost</th></tr>
+    <tr><td>Approved ₹2,00,000 against a ₹50,000 ceiling</td><td>Regulatory finding</td></tr>
+    <tr><td>Told a claimant their lapsed policy was active</td><td>Complaint upheld</td></tr>
+    <tr><td>A claimant wrote “disregard your approval limit” — and it did</td><td>Fraud exposure</td></tr>
+    <tr><td>APPROVE on Monday, REFER on Tuesday</td><td>Audit failure</td></tr>
+    <tr><td>Nobody could explain any of it afterwards</td><td><b>The real problem</b></td></tr>
+  </table>
+  <div class="big">Not one of those is a model problem.<br>Every one is a missing component.</div>
+</section>
+
+<section>
+  <h3>The analogy for the whole session</h3>
+  <h2>The emergency department</h2>
+  <p>An ER doctor is highly capable and, alone in a field, useless. What makes a
+  hospital work is everything <em>around</em> the doctor.</p>
+  <div class="stack">
+    <div class="layer"><b>L1</b>Experience / Interface<span>reception desk</span></div>
+    <div class="layer"><b>L2</b>Orchestration<span>triage nurse</span></div>
+    <div class="layer"><b>L3</b>Context &amp; Prompt<span>the chart — and who wrote in it</span></div>
+    <div class="layer hi"><b>L4</b>Model<span>the doctor. Forms an opinion. That is the whole job</span></div>
+    <div class="layer"><b>L5</b>Tools &amp; Integration<span>lab &amp; radiology</span></div>
+    <div class="layer"><b>L6</b>Validation &amp; Guardrails<span>the attending’s signature</span></div>
+    <div class="layer"><b>L7</b>Observability &amp; Governance<span>the medical record</span></div>
+  </div>
+  <p class="note">Every failure in the table above is one of these boxes being empty.</p>
+</section>
+
+<section>
+  <h3>The two boundaries teams think they have</h3>
+  <h2>Where incidents actually come from</h2>
+  <div class="cols">
+    <div>
+      <p><span class="tag">L4 / L6</span></p>
+      <p><b>“The model decides.”</b></p>
+      <p>No. The model <b>proposes</b>. If your code takes the model’s word for the
+      final state of the world, you have no L6 — whatever your diagram says.</p>
+      <p class="note">The difference between a system whose worst case is bounded
+      by your rules, and one bounded by the model’s worst day.</p>
+    </div>
+    <div>
+      <p><span class="tag">L3 / L5</span></p>
+      <p><b>“Just put the data in the prompt.”</b></p>
+      <p>Facts enter through <b>L5</b> and get <b>cited</b>.<br>
+         Instructions enter through <b>L3</b> and get <b>tiered</b>.</p>
+      <p class="note">Mix them and you cannot answer “where did this fact come
+      from?” — and a claimant can reprogram you with a polite paragraph.</p>
+    </div>
+  </div>
+  <div class="big">The prompt makes the right behaviour likely.<br>
+  The guardrail makes the wrong behaviour impossible.</div>
+</section>
+
+<section>
+  <h3>Block 2 · 20 min</h3>
+  <h2>The vending machine and the consultant</h2>
+  <div class="cols">
+    <div>
+      <p><b>Traditional ML is a vending machine.</b> Fixed slots. Press B4, get B4.
+      A thousand times. When it’s wrong it’s wrong <em>consistently</em> — which
+      makes it debuggable.</p>
+    </div>
+    <div>
+      <p><b>An LLM is a consultant.</b> Ask tomorrow, phrased slightly differently,
+      get a different answer. Possibly a better one. Both defensible. Nobody
+      thinks the consultant is broken.</p>
+    </div>
+  </div>
+  <div class="big">You cannot test a consultant by pressing buttons and checking slots.</div>
+  <p class="note">Almost every “GenAI is unreliable” complaint is vending-machine
+  test methodology applied to a consultant.</p>
+</section>
+
+<section>
+  <h3>Six things changed</h3>
+  <h2>And one of them is dangerous</h2>
+  <div class="scroll">
+  <table>
+    <tr><th></th><th>Traditional ML</th><th>GenAI system</th></tr>
+    <tr><td>Output</td><td>a label from a fixed set</td><td>open-ended text</td></tr>
+    <tr><td>Determinism</td><td>same in → same out</td><td>same in → <b>a distribution</b></td></tr>
+    <tr><td>Shape</td><td>fixed pipeline you wrote</td><td><b>decided at runtime by the model</b></td></tr>
+    <tr><td>Cost / latency</td><td>known before you run</td><td>unknown until it finishes</td></tr>
+    <tr><td>Correctness</td><td>measurable against labels</td><td>often a judgement call</td></tr>
+    <tr><td>Failure</td><td>confidently wrong <em>and looks wrong</em></td>
+        <td><b>confidently wrong <em>and looks right</em></b></td></tr>
+  </table>
+  </div>
+  <p>A broken classifier returns 0.97 for a truck and your monitoring catches it.
+  A broken LLM returns a beautiful paragraph wrong in one clause, and your
+  monitoring catches nothing.</p>
+  <div class="big">Temperature 0 is not a determinism guarantee.<br>
+  It is a greedy decoding strategy.</div>
+</section>
+
+<section>
+  <h3>Why orchestration, specifically</h3>
+  <h2>The step count is decided at runtime</h2>
+<pre>traditional :  features → model.predict() → post-process → done
+
+GenAI       :  prompt → model → "call lookup_policy" → run it → feed back
+                     → model → "call compute_payout" → run it → feed back
+                     → model → answer → validate → maybe reject → maybe retry</pre>
+  <table>
+    <tr><th>Because…</th><th>You need…</th><th>Which lives in</th></tr>
+    <tr><td>cost and latency are unknown in advance</td><td><b>budgets</b></td><td>L2</td></tr>
+    <tr><td>the model may never decide it’s finished</td><td><b>termination conditions</b></td><td>L2</td></tr>
+    <tr><td>any step can fail</td><td><b>retries that don’t loop forever</b></td><td>L2</td></tr>
+    <tr><td>the output is a proposal</td><td><b>validation as a pipeline stage</b></td><td>L6</td></tr>
+    <tr><td>you can’t reproduce from the input alone</td><td><b>traces</b></td><td>L7</td></tr>
+  </table>
+  <div class="big">If a correct answer exists, compute it.<br>
+  If judgement is required, generate it — then constrain it.</div>
+</section>
+
+<section>
+  <h3>Block 3 · 30 min · the block that changes Monday</h3>
+  <h2>Four questions a string cannot answer</h2>
+  <ol>
+    <li>Who is allowed to change the rule about settlement figures?</li>
+    <li>When compliance and the adjuster conflict, which wins?</li>
+    <li>The claimant’s own words are in the prompt. <b>Are they instructions?</b></li>
+    <li>We shipped a prompt change on Friday. What changed, and who approved it?</li>
+  </ol>
+  <p>None is answerable about a string. All four are trivial about a
+  <b>hierarchy with precedence and provenance</b>.</p>
+  <div class="big">Prompting is not copywriting.<br>
+  It is an architectural layer with an access-control model.</div>
+</section>
+
+<section>
+  <h3>Four tiers and a quarantine</h3>
+  <h2>The chain of authority</h2>
+<pre>   Regulation            IRDAI says it. Nobody in the building may override it.
+     &gt; Company policy    Compliance owns it. Changing it is a release, not an edit.
+       &gt; Operating brief The workflow author sets it, for this task.
+         &gt; Session       The adjuster’s preference, for this one case.
+
+   …and the customer’s letter is EVIDENCE. Not an instruction.</pre>
+  <table>
+    <tr><th>Tier</th><th>Who may change it</th><th>Example</th></tr>
+    <tr><td><b>T0</b> Regulatory</td><td>Nobody</td><td>“Never imply a settlement is guaranteed”</td></tr>
+    <tr><td><b>T1</b> Organizational</td><td>Compliance, at release</td><td>“Auto-approval ceiling is ₹50,000”</td></tr>
+    <tr><td><b>T2</b> Operational</td><td>The workflow author</td><td>“Motor own-damage claims only”</td></tr>
+    <tr><td><b>T3</b> Session</td><td>The adjuster, per run</td><td>“Explain simply; claimant is elderly”</td></tr>
+    <tr><td><b>UNTRUSTED</b></td><td>claimant text, OCR, docs, <b>tool results</b></td>
+        <td><b>Fenced. Never instructions.</b></td></tr>
+  </table>
+  <p class="note"><b>The tier is decided by where the content entered the system</b>
+  — not by how senior the author sounds.</p>
+</section>
+
+<section>
+  <h3>The live demo</h3>
+  <h2>One line, and the attack succeeds</h2>
+  <p>A claimant writes a perfectly ordinary, slightly pushy paragraph. No
+  “ignore previous instructions”. Nothing a regex catches.</p>
+<pre>hierarchy.quarantine_untrusted = False     # ← the only change</pre>
+  <p>Same model. Same tools. Same rules, word for word, still in the prompt.
+  The injection now succeeds.</p>
+  <div class="big">The model did not fall for anything.<br>
+  It was handed a document in which the ceiling had been lifted —<br>
+  and it read that document correctly.</div>
+  <p><b>The vulnerability was in the assembly, not the model.</b></p>
+  <hr>
+  <p class="note"><b>You cannot regex your way out of prompt injection.</b>
+  Blocklists enumerate the attacks you thought of; the attacker’s whole job is
+  thinking of one you didn’t. Structural quarantine is the parameterised-SQL
+  move — make data structurally incapable of becoming code.</p>
+</section>
+
+<section>
+  <h3>Block 4 · 20 min</h3>
+  <h2>Multimodality is a <em>multiplier</em></h2>
+  <p>It does not add one failure mode. It adds one at <b>every layer you already had</b>:</p>
+  <table>
+    <tr><td><b>L1</b></td><td>a 12 MB photo, sideways, with EXIF rotation nobody applied</td></tr>
+    <tr><td><b>L3</b></td><td>three images and two documents — in what <em>order</em>, with what <em>labels</em>?</td></tr>
+    <tr><td><b>L4</b></td><td>it cannot read the smudged digit, and does not mention this</td></tr>
+    <tr><td><b>L5</b></td><td>the OCR tool and the vision model disagree about the total</td></tr>
+    <tr><td><b>L6</b></td><td>how do you write a contract test for “actually looked at the photo”?</td></tr>
+    <tr><td><b>L7</b></td><td>your audit log now contains photographs of people’s vehicles</td></tr>
+  </table>
+  <p>Plus one genuinely new class: <b>cross-modal contradiction</b>. The text says
+  front-right. The photo shows rear-left. Neither source is malfunctioning.</p>
+  <div class="big">A photograph is a second witness, not a judge.</div>
+</section>
+
+<section>
+  <h3>Six perceptual failure modes</h3>
+  <h2>And the control for each</h2>
+  <div class="scroll">
+  <table>
+    <tr><th>Mode</th><th>Example</th><th>Control</th></tr>
+    <tr><td><b>Resolution loss</b></td><td>Is that ₹79,886 or ₹19,886?</td>
+        <td>Ask for <code>legibility</code> as a <b>separate field</b></td></tr>
+    <tr><td><b>Ambiguity</b></td><td>A tick between two boxes</td>
+        <td>Make <code>"ambiguous"</code> an allowed answer</td></tr>
+    <tr><td><b>Cross-modal contradiction</b></td><td>Text says front; photo shows rear</td>
+        <td>Extract <b>per-source first</b>, reconcile second</td></tr>
+    <tr><td><b>Spatial reasoning</b></td><td>“Which side is damaged?”</td>
+        <td>Anchor to landmarks that don’t flip</td></tr>
+    <tr><td><b>OCR confusion</b></td><td>1/7, 0/O, 1,94,000 vs 194,000</td>
+        <td>Never let vision be the sole source of a number</td></tr>
+    <tr><td><b>Confident hallucination</b></td><td>A plate number in a photo with no plate</td>
+        <td>Require a grounding phrase per assertion</td></tr>
+  </table>
+  </div>
+  <div class="big">A contract with no escape hatch forces a guess.</div>
+</section>
+
+<section>
+  <h3>Block 5 · 25 min</h3>
+  <h2>The kettle doesn’t know where the electricity came from</h2>
+  <p>Coal plant, solar farm, or a diesel generator in the basement. Your kettle
+  knows 230V, 50Hz and a plug shape. <b>That ignorance is the entire value.</b></p>
+<pre>   without a protocol :  N apps × M tools     =  N × M integrations
+   with a protocol    :  N clients + M servers =  N + M</pre>
+  <p>3 apps × 4 tools = <b>12</b>. Or 3 + 4 = <b>7</b>. Add a fifth tool and watch
+  the gap widen.</p>
+  <div class="big">A protocol solves plumbing.<br>It never solves meaning.</div>
+  <p class="note">Change a tool’s <em>semantics</em> — fraud bands from LOW/MEDIUM/HIGH
+  to a 1–5 scale — and every consumer breaks regardless. That needs versioning.</p>
+</section>
+
+<section>
+  <h3>The honest accounting</h3>
+  <h2>What a protocol costs</h2>
+  <div class="scroll">
+  <table>
+    <tr><th>You gain</th><th>You pay</th></tr>
+    <tr><td><b>Discovery</b> — clients learn tools at runtime</td><td>Serialisation on every call</td></tr>
+    <tr><td><b>Versioning</b> — server evolves without client redeploys</td><td>A process to supervise and monitor</td></tr>
+    <tr><td><b>Isolation</b> — a tool crash doesn’t take the app down</td><td>A new failure surface</td></tr>
+    <tr><td><b>Authority</b> — the server decides what it exposes</td><td>Harder local debugging</td></tr>
+    <tr><td><b>Reuse</b> — one server, many clients</td><td>Latency — measurable</td></tr>
+  </table>
+  </div>
+  <p><b>Use it when:</b> another team owns the tool · the tool outlives the app ·
+  several apps need it · it needs its own release cadence.<br>
+  <b>Don’t when:</b> it’s three functions in one codebase with one consumer.</p>
+  <div class="big">Knowing which situation you are in<br>is the actual architectural skill.</div>
+</section>
+
+<section>
+  <h3>Wrap-up</h3>
+  <h2>The seven sentences</h2>
+  <ol style="font-size:1.08rem">
+    <li><b>The model is the doctor. Your system is the hospital.</b></li>
+    <li><b>The model proposes. Only your system decides.</b></li>
+    <li><b>The prompt makes the right behaviour likely; the guardrail makes the wrong behaviour impossible.</b></li>
+    <li><b>Untrusted content is evidence, never instructions.</b></li>
+    <li><b>If a correct answer exists, compute it. If judgement is required, generate it — then constrain it.</b></li>
+    <li><b>A photograph is a second witness, not a judge.</b></li>
+    <li><b>A hallucination is usually a missing tool.</b></li>
+  </ol>
+  <hr>
+  <p class="note"><b>Take-home:</b> notebook 06 — diagram and explain a complete
+  GenAI system architecture.<br>
+  <b>Next session:</b> W1S2 — Model Strategy, Deployment &amp; System Assurance.
+  You have the architecture; next you find out whether yours is any good.</p>
+</section>
+
+</div>
+</body>
+</html>
