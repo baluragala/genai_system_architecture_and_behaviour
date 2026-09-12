@@ -1,12 +1,13 @@
 """Part A — orientation, the problem, architecture, setup, data, retrieval."""
 from __future__ import annotations
 
-from copilot_common import (INSTALL, APIKEY, IMPORTS, analogy, breaks, code, how,
-                            md, predict, what, why)
+from copilot_common import (INSTALL, APIKEY, IMPORTS, analogy, badge, breaks,
+                            code, how, md, predict, what, why)
 
 
 def build():
     return [
+        badge(),
         # ================================================================
         md('''
 # GenAI System Architecture — Zero to Hero
@@ -99,6 +100,31 @@ triage) with a reusable Python package, a test suite, and an instructor guide,
 see `notebooks/01`–`06` and the `meridian/` package in this repo. That sequence
 goes deeper on prompt hierarchies, guardrail design and MCP; this notebook goes
 *broader*, covering RAG, evaluation and cost as well.
+
+---
+
+### Running this in Google Colab
+
+1. Click **Open in Colab** at the top of this notebook.
+2. Add your OpenAI key as a **Colab Secret** — this is the safe way, and it
+   keeps the key out of the notebook and out of your sharing history:
+
+   > sidebar → 🔑 **key icon** → **+ Add new secret**
+   > → name it exactly `OPENAI_API_KEY` → paste the value
+   > → toggle **Notebook access** ON
+
+3. **Runtime → Run all**, or work through cell by cell.
+
+No GPU is needed — pick the free CPU runtime. Nothing is downloaded except
+Python packages, and nothing is cloned: this notebook is self-contained.
+
+**A full top-to-bottom run takes about 3 minutes and costs roughly $0.04** at
+gpt-4o-mini prices. The notebook prints its own running cost as it goes, so you
+can watch it accumulate.
+
+> **Running locally instead?** `pip install -r requirements.txt`, then
+> `export OPENAI_API_KEY=sk-...` and launch Jupyter. The setup cells detect
+> which environment you are in and behave accordingly.
 
 **Run the two setup cells below first.**
 '''),

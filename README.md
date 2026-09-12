@@ -1,5 +1,10 @@
 # GenAI System Architecture & Behaviour
 
+[![Open the Zero-to-Hero notebook in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/GenAI_System_Architecture_Zero_to_Hero_Enterprise_Copilot.ipynb)
+[![OpenAI](https://img.shields.io/badge/OpenAI-gpt--4o--mini-412991?logo=openai&logoColor=white)](https://platform.openai.com/docs/models)
+[![Tests](https://img.shields.io/badge/tests-56%20passing-success)](tests/)
+[![Runtime](https://img.shields.io/badge/runtime-CPU%20only-success)](#quick-start)
+
 A complete, hands-on teaching package for the 120-minute live session
 **"GenAI System Architecture & Behaviour"** (GenAI — C8W1S1).
 
@@ -66,14 +71,14 @@ claim intake → validation → prompt assembly (hierarchy) → model
 
 Each maps to one agenda block, timeboxed to match.
 
-| # | Notebook | Agenda block | Min | What gets built |
-|---|---|---|---|---|
-| 01 | `01_genai_stack.ipynb` | Understand GenAI stack | 25 | A naive one-call triage, then the same claim through seven layers |
-| 02 | `02_ml_vs_genai.ipynb` | Compare ML and GenAI paradigms | 20 | The same claim 10× at T=0 and T=1; disagreement **measured**, not asserted |
-| 03 | `03_prompt_architecture.ipynb` | Design system prompting strategies | 30 | An injection defeated — then the quarantine removed and the same injection succeeds |
-| 04 | `04_multimodal.ipynb` | Analyse multimodal complexity | 20 | Three contradictory artifacts and six perceptual failure modes |
-| 05 | `05_protocols_and_mcp.ipynb` | Understand protocols & interoperability | 25 | Tools moved behind a **real MCP stdio server**; one line changes, nothing else does |
-| 06 | `06_capstone_reference.ipynb` | — | homework | Full governed pipeline, layer ablations, and "diagram your own system" |
+| # | Notebook | Agenda block | Min | What gets built | |
+|---|---|---|---|---|---|
+| 01 | `01_genai_stack.ipynb` | Understand GenAI stack | 25 | A naive one-call triage, then the same claim through seven layers | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/01_genai_stack.ipynb) |
+| 02 | `02_ml_vs_genai.ipynb` | Compare ML and GenAI paradigms | 20 | The same claim 10× at T=0 and T=1; disagreement **measured**, not asserted | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/02_ml_vs_genai.ipynb) |
+| 03 | `03_prompt_architecture.ipynb` | Design system prompting strategies | 30 | An injection defeated — then the quarantine removed and the same injection succeeds | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/03_prompt_architecture.ipynb) |
+| 04 | `04_multimodal.ipynb` | Analyse multimodal complexity | 20 | Three contradictory artifacts and six perceptual failure modes | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/04_multimodal.ipynb) |
+| 05 | `05_protocols_and_mcp.ipynb` | Understand protocols & interoperability | 25 | Tools moved behind a **real MCP stdio server**; one line changes, nothing else does | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/05_protocols_and_mcp.ipynb) |
+| 06 | `06_capstone_reference.ipynb` | — | homework | Full governed pipeline, layer ablations, and "diagram your own system" | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/06_capstone_reference.ipynb) |
 
 ### Three demos that *are* the session
 
@@ -89,7 +94,18 @@ Cut anything else first:
 
 ### Colab (what learners use)
 
-Open any notebook with its **Open in Colab** badge, then:
+**Standalone, no clone needed —** the Zero-to-Hero copilot:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/GenAI_System_Architecture_Zero_to_Hero_Enterprise_Copilot.ipynb)
+
+**The 120-minute session sequence** (these clone the repo automatically):
+
+| | | |
+|---|---|---|
+| [![01](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/01_genai_stack.ipynb) 01 · the stack | [![02](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/02_ml_vs_genai.ipynb) 02 · ML vs GenAI | [![03](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/03_prompt_architecture.ipynb) 03 · prompting |
+| [![04](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/04_multimodal.ipynb) 04 · multimodal | [![05](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/05_protocols_and_mcp.ipynb) 05 · protocols | [![06](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/baluragala/genai_system_architecture_and_behaviour/blob/main/notebooks/06_capstone_reference.ipynb) 06 · capstone |
+
+Then, in any of them:
 
 ```
 sidebar → key icon → add a secret named OPENAI_API_KEY → Notebook access ON

@@ -22,6 +22,24 @@ from nbtools import ROOT, code, md, notebook  # noqa: F401
 FILE = "GenAI_System_Architecture_Zero_to_Hero_Enterprise_Copilot.ipynb"
 OUT = os.path.join(ROOT, FILE)
 
+# INSTRUCTOR: point this at your fork before publishing. It is the only place
+# the repo name appears, so a rename cannot leave the badge pointing at a 404.
+REPO = "baluragala/genai_system_architecture_and_behaviour"
+COLAB_URL = f"https://colab.research.google.com/github/{REPO}/blob/main/{FILE}"
+
+
+def badge() -> "dict":
+    """The Open-in-Colab button. Must be the FIRST cell: GitHub renders it at
+    the top of the notebook preview, which is where people click from."""
+    return md(
+        f"[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({COLAB_URL})\n"
+        f"&nbsp;\n"
+        f"[![Made with OpenAI](https://img.shields.io/badge/OpenAI-gpt--4o--mini-412991?logo=openai&logoColor=white)]"
+        f"(https://platform.openai.com/docs/models)\n"
+        f"[![Runtime](https://img.shields.io/badge/runtime-CPU%20only-success)]({COLAB_URL})\n"
+        f"[![Cost](https://img.shields.io/badge/full%20run-~%240.04-blue)]({COLAB_URL})"
+    )
+
 MODEL = "gpt-4o-mini"
 EMBED_MODEL = "text-embedding-3-small"
 
@@ -149,7 +167,11 @@ IMPORTS = '''
 # ============================================================
 # Standard imports used throughout the notebook.
 # ============================================================
-import base64, json, math, re, sqlite3, textwrap, time
+# `os` and `sys` are imported here EXPLICITLY even though the setup cells above
+# already pulled them in. Notebooks get run out of order and kernels get
+# restarted; a module that is only in scope by accident is a NameError waiting
+# for the worst possible moment.
+import base64, json, math, os, re, sqlite3, sys, time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
